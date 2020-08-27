@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Card.h"
 #include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
@@ -9,15 +10,24 @@
 #include "DummyButton.generated.h"
 
 UCLASS()
-class MEMORYCARDS_API UDummyButton : public UButton {
+class MEMORYCARDS_API UDummyButton : public UButton, public ICard {
 	GENERATED_BODY()
 	
 public:
 	UDummyButton();
+	
 	UFUNCTION()
-		void HandleClick();
+		virtual void Flip() override final;
+	UFUNCTION()
+		virtual void Disable() override final;
+	UFUNCTION()
+		virtual int32 GetValue() override final;
+	UFUNCTION()
+		virtual void HandleClick() override final;
 
 protected:
+	static AMemoryCardsGameModeBase* CurrentGameMode;
+
 	UPROPERTY(EditAnywhere)
 		uint8 Index;
 	UPROPERTY(VisibleAnywhere)
@@ -27,6 +37,5 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		UTextBlock* TextBlock;
-	void FlipCard();
 	void UpdateText();
 };
