@@ -25,9 +25,9 @@ public:
 		TSubclassOf<UUserWidget> InitialWidgetClass;
 	
 	UFUNCTION()
-		void OnCardClicked(TScriptInterface<ICard> Card);
+		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
-		int32 GetCardValue(uint8 Index) const;
+		void OnCardClicked(TScriptInterface<ICard> Card);
 	UFUNCTION(BlueprintCallable)
 		void SetScoreTextBlock(UScoreTextBlock* TextBlock);
 

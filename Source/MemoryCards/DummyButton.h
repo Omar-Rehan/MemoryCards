@@ -21,9 +21,17 @@ public:
 	UFUNCTION()
 		virtual void Disable() override final;
 	UFUNCTION()
+		virtual void HandleClick() override final;
+
+	UFUNCTION()
 		virtual int32 GetValue() override final;
 	UFUNCTION()
-		virtual void HandleClick() override final;
+		virtual void SetValue(int32 NewValue) override final;
+	
+	UFUNCTION()
+		virtual uint8 GetIndex() override final;
+	UFUNCTION()
+		virtual void SetIndex(int32 NewIndex) override final;
 
 protected:
 	static AMemoryCardsGameModeBase* CurrentGameMode;

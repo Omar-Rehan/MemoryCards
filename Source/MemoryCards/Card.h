@@ -16,7 +16,15 @@ public:
 	UFUNCTION()
 		virtual void Disable() = 0;
 	UFUNCTION()
+		virtual void HandleClick() = 0;
+
+	UFUNCTION()
 		virtual int32 GetValue() = 0;
 	UFUNCTION()
-		virtual void HandleClick() = 0;
+		virtual void SetValue(int32 NewValue) = 0;
+
+	UFUNCTION()
+		virtual uint8 GetIndex() = 0;
+	UFUNCTION()
+		virtual void SetIndex(int32 NewValue) = 0;
 };

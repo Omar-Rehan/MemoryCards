@@ -9,31 +9,41 @@ UDummyButton::UDummyButton() {
 	Value = -1;
 	bHidden = true;
 	
-	/// Bind the "HandleClick" function to the OnClicked event
 	OnClicked.AddDynamic(this, &UDummyButton::HandleClick);
 }
 
-void UDummyButton::HandleClick() {
-	if (!CurrentGameMode) // TODO: Find a better place for this
-		CurrentGameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-
-	if (CurrentGameMode)
-		CurrentGameMode->OnCardClicked(this);
-}
-
 void UDummyButton::Flip() {
-	bool bIsValueAssigned = (Value != -1);
-	if (!bIsValueAssigned && CurrentGameMode) {
-		Value = CurrentGameMode->GetCardValue(Index);
-	}
-
 	UpdateText();
 }
 void UDummyButton::Disable() {
 	SetIsEnabled(false);
 }
+void UDummyButton::HandleClick() {
+	if (!CurrentGameMode) // TODO: Find a better place for this
+		CurrentGameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	if (CurrentGameMode) {
+		bool bIsValueAssigned = (Value != -1);
+		if (!bIsValueAssigned) {
+			CurrentGameMode->InitializeCard(this);
+		}
+		
+		CurrentGameMode->OnCardClicked(this);
+	}
+}
+
+void UDummyButton::SetValue(int32 NewValue) {
+	Value = NewValue;
+}
 int32 UDummyButton::GetValue() {
 	return Value;
+}
+
+void UDummyButton::SetIndex(int32 NewIndex) {
+	Index = NewIndex;
+}
+uint8 UDummyButton::GetIndex() {
+	return Index;
 }
 
 void UDummyButton::UpdateText() {

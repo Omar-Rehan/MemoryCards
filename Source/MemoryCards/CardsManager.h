@@ -8,25 +8,24 @@
 UCLASS()
 class MEMORYCARDS_API UCardsManager : public UObject {
 	GENERATED_BODY()
-
-	UCardsManager();
 	
 public:
 	UFUNCTION()
-		void InitializeCardSet();
+		void Initialize(uint8 NumberOfCards);
 	UFUNCTION()
-		int32 GetCardValue(uint8 Index) const;
+		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
 		void OnCardClicked(TScriptInterface<ICard> Card);
 
 protected:
-	UPROPERTY()
-		uint16 CardSetSize;
+	uint8 CardSetSize;
 	UPROPERTY()
 		TArray<int32> CardSetValues;
 	UPROPERTY()
-		TArray<TScriptInterface<ICard>> FlippedCards;
+		TArray<TScriptInterface<ICard>> CardSet;
+	UPROPERTY()
+		TScriptInterface<ICard> FlippedCard;
 
 	UFUNCTION()
-		bool IsMatch();
+		void InitializeCardSetValues();
 };
