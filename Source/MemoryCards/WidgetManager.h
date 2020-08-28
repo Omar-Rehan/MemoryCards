@@ -18,4 +18,6 @@ public:
 protected:
 	UPROPERTY()
 		UUserWidget* CurrentWidget;
+	//UPROPERTY(EditAnywhere)
+	//	TSubclassOf<UUserWidget> GameWidgetClass;
 };
