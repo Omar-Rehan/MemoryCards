@@ -31,12 +31,12 @@ public:
 	UFUNCTION()
 		virtual uint8 GetIndex() override final;
 	UFUNCTION()
-		virtual void SetIndex(int32 NewIndex) override final;
+		virtual void SetIndex(uint8 NewIndex) override final;
 
 protected:
 	static AMemoryCardsGameModeBase* CurrentGameMode;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 		uint8 Index;
 	UPROPERTY(VisibleAnywhere)
 		int32 Value;

@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "CardsManager.h"
 #include "WidgetManager.h"
-#include "ScoreTextBlock.h"
+#include "Components/TextBlock.h"
 #include "GameFramework/GameModeBase.h"
 #include "MemoryCardsGameModeBase.generated.h"
 
@@ -15,21 +15,21 @@ class MEMORYCARDS_API AMemoryCardsGameModeBase : public AGameModeBase {
 	
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 		UWidgetManager* WidgetManager;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 		UCardsManager* CardsManager;
 
 public:
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> InitialWidgetClass;
+		TSubclassOf<UUserWidget> GameWidgetClass;
 	
 	UFUNCTION()
 		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
 		void OnCardClicked(TScriptInterface<ICard> Card);
 	UFUNCTION(BlueprintCallable)
-		void SetScoreTextBlock(UScoreTextBlock* TextBlock);
+		void SetNumOfMovesTextBlock(UTextBlock* TextBlock);
 
 
 	/// Game Manager
@@ -37,5 +37,5 @@ protected:
 	UPROPERTY()
 		uint8 NumOfMoves;
 	UPROPERTY()
-		UScoreTextBlock* ScoreTextBlock;
+		UTextBlock* NumOfMovesTextBlock;
 };

@@ -13,11 +13,9 @@ public:
 	UWidgetManager();
 
 	UFUNCTION()
-		void ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass);
+		void ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference);
 
 protected:
 	UPROPERTY()
 		UUserWidget* CurrentWidget;
-	//UPROPERTY(EditAnywhere)
-	//	TSubclassOf<UUserWidget> GameWidgetClass;
 };

@@ -1,0 +1,28 @@
+#include "WidgetManager.h"
+
+UWidgetManager::UWidgetManager() {
+	CurrentWidget = nullptr;
+	UE_LOG(LogTemp, Warning, TEXT("Widget Manager Constructor"));
+}
+
+void UWidgetManager::ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass) {
+	UE_LOG(LogTemp, Warning, TEXT("Change widget"));
+	if (CurrentWidget) {
+		CurrentWidget->RemoveFromViewport();
+		CurrentWidget = nullptr;
+		UE_LOG(LogTemp, Warning, TEXT("the old widget has been removed"));
+	}
+
+	if (NewWidgetClass) {
+		UE_LOG(LogTemp, Warning, TEXT("New widget class is not null"));
+		CurrentWidget = CreateWidget(GetWorld(), NewWidgetClass);
+		if (CurrentWidget) {
+			CurrentWidget->AddToViewport();
+			UE_LOG(LogTemp, Warning, TEXT("new widget created successfully"));
+		} else {
+			UE_LOG(LogTemp, Warning, TEXT("new widget creation failed"));
+		}
+	} else {
+		UE_LOG(LogTemp, Warning, TEXT("New widget class is null"));
+	}
+}

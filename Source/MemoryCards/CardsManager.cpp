@@ -1,10 +1,12 @@
 #include "CardsManager.h"
 
 void UCardsManager::Initialize(uint8 NumberOfCards) {
+	UE_LOG(LogTemp, Warning, TEXT("CardsManager Initialize called"))
 	CardSetSize = NumberOfCards;
 	InitializeCardSetValues();
 }
 void UCardsManager::InitializeCard(TScriptInterface<ICard> Card) {
+	UE_LOG(LogTemp, Warning, TEXT("CardsManager InitializeCard called"))
 	uint8 Index = CardSet.Num();
 	if (!CardSetValues.IsValidIndex(Index)) {
 		UE_LOG(LogTemp, Warning, TEXT("Card Index is out of bounds"));
@@ -17,6 +19,7 @@ void UCardsManager::InitializeCard(TScriptInterface<ICard> Card) {
 	CardSet.Push(Card);
 }
 void UCardsManager::OnCardClicked(TScriptInterface<ICard> Card) {
+	UE_LOG(LogTemp, Warning, TEXT("CardsManager OnCardClicked called"))
 	bool bCardAlreadyFlipped = (Card == FlippedCard);
 	if (bCardAlreadyFlipped) {
 		UE_LOG(LogTemp, Warning, TEXT("A Card Has Been Unflipped"));

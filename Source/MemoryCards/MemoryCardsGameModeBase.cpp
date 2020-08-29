@@ -1,29 +1,57 @@
 #include "MemoryCardsGameModeBase.h"
 
 AMemoryCardsGameModeBase::AMemoryCardsGameModeBase() {
-	InitialWidgetClass = nullptr; // to be changed from the editor
-	WidgetManager = CreateDefaultSubobject<UWidgetManager>(TEXT("Widget Manager"));
-	CardsManager = CreateDefaultSubobject<UCardsManager>(TEXT("Cards Manager"));
+	GameWidgetClass = nullptr; // to be changed from the editor
 }
 
 void AMemoryCardsGameModeBase::BeginPlay() {
 	Super::BeginPlay();
-	WidgetManager->ChangeWidget(InitialWidgetClass);
-	CardsManager->Initialize(8);
+
+	WidgetManager = NewObject<UWidgetManager>();
+	if (WidgetManager)
+		UE_LOG(LogTemp, Warning, TEXT("WidgetManager creation successful"))
+	else
+		UE_LOG(LogTemp, Warning, TEXT("WidgetManager creation failed"));
+
+	CardsManager = NewObject<UCardsManager>();
+	if (CardsManager)
+		UE_LOG(LogTemp, Warning, TEXT("CardsManager creation successful"))
+	else
+		UE_LOG(LogTemp, Warning, TEXT("CardsManager creation failed"));
+
+
+
+	if (WidgetManager)
+		WidgetManager->ChangeWidget(GameWidgetClass, GetWorld());
+	else
+		UE_LOG(LogTemp, Warning, TEXT("WidgetManager is null in GameMode::BeginPlay"))
+
+	if (CardsManager)
+		CardsManager->Initialize(8);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("CardsManager is null in GameMode::BeginPlay"))
+
+
 	NumOfMoves = 0;
 }
 
 void AMemoryCardsGameModeBase::OnCardClicked(TScriptInterface<ICard> Card) {
-	CardsManager->OnCardClicked(Card);
+	if (CardsManager)
+		CardsManager->OnCardClicked(Card);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("CardsManager is null in OnCardClicked"))
 	
-	if (ScoreTextBlock)
-		ScoreTextBlock->SetText(FText::FromString(FString("Number of moves: ") + FString::FromInt(++NumOfMoves)));
+	if (NumOfMovesTextBlock)
+		NumOfMovesTextBlock->SetText(FText::FromString(FString("Number of moves: ") + FString::FromInt(++NumOfMoves)));
 }
 void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {
-	CardsManager->InitializeCard(Card);
+	if (CardsManager)
+		CardsManager->InitializeCard(Card);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("CardsManager is null in GameMode::InitializeCard"))
 }
 
-void AMemoryCardsGameModeBase::SetScoreTextBlock(UScoreTextBlock* TextBlock) {
+void AMemoryCardsGameModeBase::SetNumOfMovesTextBlock(UTextBlock* TextBlock) {
 	if (TextBlock) 
-		ScoreTextBlock = TextBlock;
+		NumOfMovesTextBlock = TextBlock;
 }

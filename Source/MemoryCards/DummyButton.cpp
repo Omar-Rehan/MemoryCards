@@ -3,10 +3,8 @@
 AMemoryCardsGameModeBase* UDummyButton::CurrentGameMode = nullptr;
 
 UDummyButton::UDummyButton() {
-	FString ButtonIndex = GetName().RightChop(4);
-	Index = FCString::Atoi(*ButtonIndex);
-	
 	Value = -1;
+	Index = 255;
 	bHidden = true;
 	
 	OnClicked.AddDynamic(this, &UDummyButton::HandleClick);
@@ -39,7 +37,7 @@ int32 UDummyButton::GetValue() {
 	return Value;
 }
 
-void UDummyButton::SetIndex(int32 NewIndex) {
+void UDummyButton::SetIndex(uint8 NewIndex) {
 	Index = NewIndex;
 }
 uint8 UDummyButton::GetIndex() {

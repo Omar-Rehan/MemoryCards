@@ -26,5 +26,5 @@ public:
 	UFUNCTION()
 		virtual uint8 GetIndex() = 0;
 	UFUNCTION()
-		virtual void SetIndex(int32 NewValue) = 0;
+		virtual void SetIndex(uint8 NewValue) = 0;
 };
