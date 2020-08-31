@@ -15,6 +15,9 @@ class MEMORYCARDS_API UDummyButton : public UButton, public ICard {
 	
 public:
 	UDummyButton();
+
+	UFUNCTION(BlueprintCallable)
+		void Initialize();
 	
 	UFUNCTION()
 		virtual void Flip() override final;
@@ -34,7 +37,8 @@ public:
 		virtual void SetIndex(uint8 NewIndex) override final;
 
 protected:
-	static AMemoryCardsGameModeBase* CurrentGameMode;
+	UPROPERTY()
+		AMemoryCardsGameModeBase* CurrentGameMode;
 
 	UPROPERTY(VisibleAnywhere)
 		uint8 Index;

@@ -2,20 +2,23 @@
 
 #include "CoreMinimal.h"
 #include "Card.h"
-#include "UObject/NoExportTypes.h"
-#include "CardsManager.generated.h"
+#include "Components/ActorComponent.h"
+#include "CardSetManager.generated.h"
 
-UCLASS()
-class MEMORYCARDS_API UCardsManager : public UObject {
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class MEMORYCARDS_API UCardSetManager : public UActorComponent {
 	GENERATED_BODY()
-	
-public:
+
+public:	
 	UFUNCTION()
 		void Initialize(uint8 NumberOfCards);
 	UFUNCTION()
 		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
-		void OnCardClicked(TScriptInterface<ICard> Card);
+		bool OnCardClicked(TScriptInterface<ICard> Card);
+	UFUNCTION()
+		void DisableAllCards();
 
 protected:
 	uint8 CardSetSize;

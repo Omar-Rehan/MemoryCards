@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CardsManager.h"
-#include "WidgetManager.h"
+#include "CardSetManager.h"
+#include "WidgetsManager.h"
 #include "Components/TextBlock.h"
 #include "GameFramework/GameModeBase.h"
 #include "MemoryCardsGameModeBase.generated.h"
@@ -16,26 +16,40 @@ class MEMORYCARDS_API AMemoryCardsGameModeBase : public AGameModeBase {
 	virtual void BeginPlay() override;
 
 	UPROPERTY()
-		UWidgetManager* WidgetManager;
+		UWidgetsManager* WidgetsManager;
 	UPROPERTY()
-		UCardsManager* CardsManager;
+		UCardSetManager* CardSetManager;
 
 public:
+	UPROPERTY()
+		uint8 NumOfCards;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> GameWidgetClass;
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
 		void OnCardClicked(TScriptInterface<ICard> Card);
 	UFUNCTION(BlueprintCallable)
 		void SetNumOfMovesTextBlock(UTextBlock* TextBlock);
+	UFUNCTION()
+		void SetNumOfCards(uint8 NumberOfCards);
 
 
 	/// Game Manager
 protected:
 	UPROPERTY()
+		uint8 NumOfMatches;
+	UPROPERTY()
+		uint8 NumOfMatchesMax;
+	
+	UPROPERTY()
 		uint8 NumOfMoves;
 	UPROPERTY()
+		uint8 NumOfMovesMax;
+	UPROPERTY()
 		UTextBlock* NumOfMovesTextBlock;
+
+	UFUNCTION()
+		void EndGame(bool bWon);
 };

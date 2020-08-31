@@ -2,15 +2,16 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "UObject/NoExportTypes.h"
-#include "WidgetManager.generated.h"
+#include "Components/ActorComponent.h"
+#include "WidgetsManager.generated.h"
 
-UCLASS()
-class MEMORYCARDS_API UWidgetManager : public UObject {
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class MEMORYCARDS_API UWidgetsManager : public UActorComponent {
 	GENERATED_BODY()
-	
+
 public:
-	UWidgetManager();
+	UWidgetsManager();
 
 	UFUNCTION()
 		void ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference);

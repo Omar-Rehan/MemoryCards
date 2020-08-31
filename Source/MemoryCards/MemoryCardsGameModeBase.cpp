@@ -2,56 +2,79 @@
 
 AMemoryCardsGameModeBase::AMemoryCardsGameModeBase() {
 	GameWidgetClass = nullptr; // to be changed from the editor
+
+	CardSetManager = CreateDefaultSubobject<UCardSetManager>(TEXT("Cards Manager"));
+	AddOwnedComponent(CardSetManager);
+
+	WidgetsManager = CreateDefaultSubobject<UWidgetsManager>(TEXT("Widgets Manager"));
+	AddOwnedComponent(WidgetsManager);
 }
 
 void AMemoryCardsGameModeBase::BeginPlay() {
 	Super::BeginPlay();
-
-	WidgetManager = NewObject<UWidgetManager>();
-	if (WidgetManager)
-		UE_LOG(LogTemp, Warning, TEXT("WidgetManager creation successful"))
-	else
-		UE_LOG(LogTemp, Warning, TEXT("WidgetManager creation failed"));
-
-	CardsManager = NewObject<UCardsManager>();
-	if (CardsManager)
-		UE_LOG(LogTemp, Warning, TEXT("CardsManager creation successful"))
-	else
-		UE_LOG(LogTemp, Warning, TEXT("CardsManager creation failed"));
-
-
-
-	if (WidgetManager)
-		WidgetManager->ChangeWidget(GameWidgetClass, GetWorld());
-	else
-		UE_LOG(LogTemp, Warning, TEXT("WidgetManager is null in GameMode::BeginPlay"))
-
-	if (CardsManager)
-		CardsManager->Initialize(8);
-	else
-		UE_LOG(LogTemp, Warning, TEXT("CardsManager is null in GameMode::BeginPlay"))
-
+	UE_LOG(LogTemp, Warning, TEXT("GameMode BeginPlay"));
 
 	NumOfMoves = 0;
+	NumOfMatches = 0;
+
+	NumOfCards = 8; // TODO: make the user choose
+	check(!(NumOfCards & 1));
+	NumOfMovesMax = NumOfCards << 1;
+	NumOfMatchesMax = NumOfCards >> 1;
+
+	if (CardSetManager)
+		CardSetManager->Initialize(NumOfCards);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("CardSetManager is null in GameMode::BeginPlay"))
+
+	if (WidgetsManager)
+		WidgetsManager->ChangeWidget(GameWidgetClass, GetWorld());
+	else
+		UE_LOG(LogTemp, Warning, TEXT("WidgetsManager is null in GameMode::BeginPlay"))
 }
 
-void AMemoryCardsGameModeBase::OnCardClicked(TScriptInterface<ICard> Card) {
-	if (CardsManager)
-		CardsManager->OnCardClicked(Card);
+void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {
+	if (CardSetManager)
+		CardSetManager->InitializeCard(Card);
 	else
-		UE_LOG(LogTemp, Warning, TEXT("CardsManager is null in OnCardClicked"))
+		UE_LOG(LogTemp, Warning, TEXT("CardSetManager is null in GameMode::InitializeCard"))
+}
+void AMemoryCardsGameModeBase::OnCardClicked(TScriptInterface<ICard> Card) {
+	if (!CardSetManager) {
+		UE_LOG(LogTemp, Warning, TEXT("Cards Manager is nullptr"));
+		return;
+	}
+		
+	bool bIsMatch = CardSetManager->OnCardClicked(Card);
+	NumOfMoves++;
+	if (bIsMatch) NumOfMatches++;
+	
+	UE_LOG(LogTemp, Warning, TEXT("Num of moves: %d"), NumOfMoves);
+	UE_LOG(LogTemp, Warning, TEXT("Num of matches: %d"), NumOfMatches);
 	
 	if (NumOfMovesTextBlock)
-		NumOfMovesTextBlock->SetText(FText::FromString(FString("Number of moves: ") + FString::FromInt(++NumOfMoves)));
-}
-void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {
-	if (CardsManager)
-		CardsManager->InitializeCard(Card);
-	else
-		UE_LOG(LogTemp, Warning, TEXT("CardsManager is null in GameMode::InitializeCard"))
+		NumOfMovesTextBlock->SetText(FText::FromString(FString("Number of moves: ") + FString::FromInt(NumOfMoves)));
+
+	if (NumOfMatches == NumOfMatchesMax)
+		EndGame(true);
+	else if (NumOfMoves == NumOfMovesMax)
+		EndGame(false);
 }
 
+void AMemoryCardsGameModeBase::SetNumOfCards(uint8 NumberOfCards) {
+	NumOfCards = NumberOfCards;
+}
 void AMemoryCardsGameModeBase::SetNumOfMovesTextBlock(UTextBlock* TextBlock) {
 	if (TextBlock) 
 		NumOfMovesTextBlock = TextBlock;
+}
+
+void AMemoryCardsGameModeBase::EndGame(bool bWon) {
+	if (bWon) {
+		UE_LOG(LogTemp, Warning, TEXT("GAME WON"));
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("GAME LOST"));
+		CardSetManager->DisableAllCards();
+	}
 }

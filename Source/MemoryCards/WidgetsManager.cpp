@@ -1,15 +1,15 @@
-#include "WidgetManager.h"
+#include "WidgetsManager.h"
 
-UWidgetManager::UWidgetManager() {
+UWidgetsManager::UWidgetsManager() {
 	CurrentWidget = nullptr;
 }
 
-void UWidgetManager::ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference) {
+void UWidgetsManager::ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference) {
 	UE_LOG(LogTemp, Warning, TEXT("ChangeWidget called"))
-	if (CurrentWidget) {
-		CurrentWidget->RemoveFromViewport();
-		CurrentWidget = nullptr;
-	}
+		if (CurrentWidget) {
+			CurrentWidget->RemoveFromViewport();
+			CurrentWidget = nullptr;
+		}
 
 	if (NewWidgetClass) {
 		UE_LOG(LogTemp, Warning, TEXT("New widget class is valid"));
@@ -18,8 +18,8 @@ void UWidgetManager::ChangeWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorl
 		if (CurrentWidget) {
 			CurrentWidget->AddToViewport();
 			UE_LOG(LogTemp, Warning, TEXT("New widget creation succeeded"))
-		}
-		else 
+		} 
+		else
 			UE_LOG(LogTemp, Error, TEXT("New widget creation failed"))
 	}
 }

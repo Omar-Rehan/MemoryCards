@@ -1,13 +1,18 @@
 #include "DummyButton.h"
 
-AMemoryCardsGameModeBase* UDummyButton::CurrentGameMode = nullptr;
-
 UDummyButton::UDummyButton() {
 	Value = -1;
 	Index = 255;
 	bHidden = true;
 	
 	OnClicked.AddDynamic(this, &UDummyButton::HandleClick);
+}
+
+void UDummyButton::Initialize() {
+	CurrentGameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	if (Value == -1)
+		CurrentGameMode->InitializeCard(this);
 }
 
 void UDummyButton::Flip() {
@@ -17,17 +22,8 @@ void UDummyButton::Disable() {
 	SetIsEnabled(false);
 }
 void UDummyButton::HandleClick() {
-	if (!CurrentGameMode) // TODO: Find a better place for this
-		CurrentGameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-
-	if (CurrentGameMode) {
-		bool bIsValueAssigned = (Value != -1);
-		if (!bIsValueAssigned) {
-			CurrentGameMode->InitializeCard(this);
-		}
-		
+	if (CurrentGameMode)
 		CurrentGameMode->OnCardClicked(this);
-	}
 }
 
 void UDummyButton::SetValue(int32 NewValue) {
