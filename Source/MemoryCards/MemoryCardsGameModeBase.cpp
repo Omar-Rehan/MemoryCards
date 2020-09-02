@@ -28,9 +28,16 @@ void AMemoryCardsGameModeBase::BeginPlay() {
 		UE_LOG(LogTemp, Warning, TEXT("CardSetManager is null in GameMode::BeginPlay"))
 
 	if (WidgetsManager)
-		WidgetsManager->ChangeWidget(GameWidgetClass, GetWorld());
+		WidgetsManager->ReplaceWidget(MenuWidgetClass, GetWorld());
 	else
 		UE_LOG(LogTemp, Warning, TEXT("WidgetsManager is null in GameMode::BeginPlay"))
+}
+
+void AMemoryCardsGameModeBase::StartGame() {
+	if (WidgetsManager) {
+		WidgetsManager->ChangeWidgetGame(GameWidgetClass, GetWorld());
+		//WidgetsManager->SetupInGameWidget();
+	}
 }
 
 void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {

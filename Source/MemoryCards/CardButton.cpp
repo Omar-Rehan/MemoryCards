@@ -1,46 +1,51 @@
-#include "DummyButton.h"
+#include "CardButton.h"
 
-UDummyButton::UDummyButton() {
+UCardButton::UCardButton() {
+	//UE_LOG(LogTemp, Warning, TEXT("Card Button Constructor"));
 	Value = -1;
 	Index = 255;
 	bHidden = true;
-	
-	OnClicked.AddDynamic(this, &UDummyButton::HandleClick);
+
+	OnClicked.AddDynamic(this, &UCardButton::HandleClick);
 }
 
-void UDummyButton::Initialize() {
+void UCardButton::Initialize() {
+	//UE_LOG(LogTemp, Warning, TEXT("Initialize"));
 	CurrentGameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	if (!CurrentGameMode)
+		UE_LOG(LogTemp, Warning, TEXT("GameMode cast failed"));
 
 	if (Value == -1)
 		CurrentGameMode->InitializeCard(this);
 }
 
-void UDummyButton::Flip() {
+void UCardButton::Flip() {
 	UpdateText();
 }
-void UDummyButton::Disable() {
+void UCardButton::Disable() {
 	SetIsEnabled(false);
 }
-void UDummyButton::HandleClick() {
+void UCardButton::HandleClick() {
 	if (CurrentGameMode)
 		CurrentGameMode->OnCardClicked(this);
 }
 
-void UDummyButton::SetValue(int32 NewValue) {
+void UCardButton::SetValue(int32 NewValue) {
 	Value = NewValue;
 }
-int32 UDummyButton::GetValue() {
+int32 UCardButton::GetValue() {
 	return Value;
 }
 
-void UDummyButton::SetIndex(uint8 NewIndex) {
+void UCardButton::SetIndex(uint8 NewIndex) {
 	Index = NewIndex;
 }
-uint8 UDummyButton::GetIndex() {
+uint8 UCardButton::GetIndex() {
 	return Index;
 }
 
-void UDummyButton::UpdateText() {
+void UCardButton::UpdateText() {
 	if (!TextBlock) {
 		UE_LOG(LogTemp, Warning, TEXT("This button's text block reference is a nullptr"));
 		return;

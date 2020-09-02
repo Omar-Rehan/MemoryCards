@@ -7,18 +7,17 @@
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 #include "MemoryCardsGameModeBase.h"
-#include "DummyButton.generated.h"
+#include "CardButton.generated.h"
 
 UCLASS()
-class MEMORYCARDS_API UDummyButton : public UButton, public ICard {
+class MEMORYCARDS_API UCardButton : public UButton, public ICard {
 	GENERATED_BODY()
-	
 public:
-	UDummyButton();
+	UCardButton();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void Initialize();
-	
+
 	UFUNCTION()
 		virtual void Flip() override final;
 	UFUNCTION()
@@ -30,7 +29,7 @@ public:
 		virtual int32 GetValue() override final;
 	UFUNCTION()
 		virtual void SetValue(int32 NewValue) override final;
-	
+
 	UFUNCTION()
 		virtual uint8 GetIndex() override final;
 	UFUNCTION()

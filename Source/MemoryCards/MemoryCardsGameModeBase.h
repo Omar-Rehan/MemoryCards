@@ -24,8 +24,12 @@ public:
 	UPROPERTY()
 		uint8 NumOfCards;
 	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> MenuWidgetClass;
+	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> GameWidgetClass;
 	
+	UFUNCTION(BlueprintCallable)
+		void StartGame();
 	UFUNCTION(BlueprintCallable)
 		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
