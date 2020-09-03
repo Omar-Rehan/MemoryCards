@@ -1,43 +1,26 @@
 #include "MemoryCardsGameModeBase.h"
 
 AMemoryCardsGameModeBase::AMemoryCardsGameModeBase() {
-	GameWidgetClass = nullptr; // to be changed from the editor
-
 	CardSetManager = CreateDefaultSubobject<UCardSetManager>(TEXT("Cards Manager"));
 	AddOwnedComponent(CardSetManager);
 
-	WidgetsManager = CreateDefaultSubobject<UWidgetsManager>(TEXT("Widgets Manager"));
-	AddOwnedComponent(WidgetsManager);
+	ViewportManager = CreateDefaultSubobject<UWidgetsManager>(TEXT("Widgets Manager"));
+	AddOwnedComponent(ViewportManager);
 }
 
 void AMemoryCardsGameModeBase::BeginPlay() {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("GameMode BeginPlay"));
 
 	NumOfMoves = 0;
 	NumOfMatches = 0;
 
-	NumOfCards = 8; // TODO: make the user choose
-	check(!(NumOfCards & 1));
-	NumOfMovesMax = NumOfCards << 1;
-	NumOfMatchesMax = NumOfCards >> 1;
-
-	if (CardSetManager)
-		CardSetManager->Initialize(NumOfCards);
-	else
-		UE_LOG(LogTemp, Warning, TEXT("CardSetManager is null in GameMode::BeginPlay"))
-
-	if (WidgetsManager)
-		WidgetsManager->ReplaceWidget(MenuWidgetClass, GetWorld());
-	else
-		UE_LOG(LogTemp, Warning, TEXT("WidgetsManager is null in GameMode::BeginPlay"))
+	if (ViewportManager)
+		ViewportManager->ReplaceWidget(StartWidgetClass, GetWorld());
 }
 
-void AMemoryCardsGameModeBase::StartGame() {
-	if (WidgetsManager) {
-		WidgetsManager->ChangeWidgetGame(GameWidgetClass, GetWorld());
-		//WidgetsManager->SetupInGameWidget();
-	}
+void AMemoryCardsGameModeBase::ReplaceWidget(TSubclassOf<UUserWidget> NewWidgetClass) {
+	if (ViewportManager)
+		ViewportManager->ReplaceWidget(NewWidgetClass, GetWorld());
 }
 
 void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {
@@ -68,12 +51,19 @@ void AMemoryCardsGameModeBase::OnCardClicked(TScriptInterface<ICard> Card) {
 		EndGame(false);
 }
 
+void AMemoryCardsGameModeBase::SetNumOfMovesTextBlock(UTextBlock* TextBlock) {
+	if (TextBlock)
+		NumOfMovesTextBlock = TextBlock;
+}
 void AMemoryCardsGameModeBase::SetNumOfCards(uint8 NumberOfCards) {
 	NumOfCards = NumberOfCards;
-}
-void AMemoryCardsGameModeBase::SetNumOfMovesTextBlock(UTextBlock* TextBlock) {
-	if (TextBlock) 
-		NumOfMovesTextBlock = TextBlock;
+	check(!(NumOfCards & 1));
+	
+	NumOfMovesMax = NumOfCards << 1;
+	NumOfMatchesMax = NumOfCards >> 1;
+
+	if (CardSetManager)
+		CardSetManager->Initialize(NumOfCards);
 }
 
 void AMemoryCardsGameModeBase::EndGame(bool bWon) {

@@ -16,7 +16,7 @@ class MEMORYCARDS_API AMemoryCardsGameModeBase : public AGameModeBase {
 	virtual void BeginPlay() override;
 
 	UPROPERTY()
-		UWidgetsManager* WidgetsManager;
+		UWidgetsManager* ViewportManager;
 	UPROPERTY()
 		UCardSetManager* CardSetManager;
 
@@ -24,20 +24,18 @@ public:
 	UPROPERTY()
 		uint8 NumOfCards;
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> MenuWidgetClass;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> GameWidgetClass;
+		TSubclassOf<UUserWidget> StartWidgetClass;
 	
 	UFUNCTION(BlueprintCallable)
-		void StartGame();
+		void ReplaceWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 	UFUNCTION(BlueprintCallable)
+		void SetNumOfCards(uint8 NumberOfCards);
+	UFUNCTION()
 		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
 		void OnCardClicked(TScriptInterface<ICard> Card);
-	UFUNCTION(BlueprintCallable)
-		void SetNumOfMovesTextBlock(UTextBlock* TextBlock);
 	UFUNCTION()
-		void SetNumOfCards(uint8 NumberOfCards);
+		void SetNumOfMovesTextBlock(UTextBlock* TextBlock);
 
 
 	/// Game Manager
