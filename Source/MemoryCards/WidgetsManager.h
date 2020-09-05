@@ -13,9 +13,13 @@ class MEMORYCARDS_API UWidgetsManager : public UActorComponent {
 	GENERATED_BODY()
 public:
 	UFUNCTION()
-		void ReplaceWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference);
+		void ReplaceWidgets(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference);
+	UFUNCTION(BlueprintCallable)
+		void AddWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference);
+	UFUNCTION()
+		void RemoveWidget(TSubclassOf<UUserWidget> WidgetClass);
 
 protected:
 	UPROPERTY()
-		UUserWidget* CurrentWidget;
+		TArray<UUserWidget*> CurrentWidgets;
 };

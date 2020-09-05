@@ -4,8 +4,15 @@ AMemoryCardsGameModeBase::AMemoryCardsGameModeBase() {
 	CardSetManager = CreateDefaultSubobject<UCardSetManager>(TEXT("Cards Manager"));
 	AddOwnedComponent(CardSetManager);
 
-	ViewportManager = CreateDefaultSubobject<UWidgetsManager>(TEXT("Widgets Manager"));
-	AddOwnedComponent(ViewportManager);
+	WidgetManager = CreateDefaultSubobject<UWidgetsManager>(TEXT("Widgets Manager"));
+	AddOwnedComponent(WidgetManager);
+
+	//WidgetClasses.Emplace("Main Menu", NULL);
+	//WidgetClasses.Emplace("Difficulty Selection", NULL);
+	//WidgetClasses.Emplace("Easy Mode", NULL);
+	//WidgetClasses.Emplace("Medium Mode", NULL);
+	//WidgetClasses.Emplace("Hard Mode", NULL);
+	//WidgetClasses.Emplace("End Game", NULL);
 }
 
 void AMemoryCardsGameModeBase::BeginPlay() {
@@ -14,13 +21,21 @@ void AMemoryCardsGameModeBase::BeginPlay() {
 	NumOfMoves = 0;
 	NumOfMatches = 0;
 
-	if (ViewportManager)
-		ViewportManager->ReplaceWidget(StartWidgetClass, GetWorld());
+	if (WidgetManager)
+		WidgetManager->ReplaceWidgets(WidgetClasses[EWidgets::MainMenu], GetWorld());
+	else
+		UE_LOG(LogTemp, Warning, TEXT("WidgetManager is nullified"));
 }
 
-void AMemoryCardsGameModeBase::ReplaceWidget(TSubclassOf<UUserWidget> NewWidgetClass) {
-	if (ViewportManager)
-		ViewportManager->ReplaceWidget(NewWidgetClass, GetWorld());
+void AMemoryCardsGameModeBase::ReplaceWidgets(TEnumAsByte<EWidgets> WidgetClass) {
+	if (WidgetManager) {
+		if (WidgetClasses.Contains(WidgetClass))
+			WidgetManager->ReplaceWidgets(WidgetClasses[WidgetClass], GetWorld());
+		else {
+			FString EnumAsString = UEnum::GetValueAsString(WidgetClass.GetValue());
+			UE_LOG(LogTemp, Warning, TEXT("There is no WidgetClass with the key %s"), *EnumAsString);
+		}
+	}
 }
 
 void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {
@@ -66,7 +81,7 @@ void AMemoryCardsGameModeBase::SetNumOfCards(uint8 NumberOfCards) {
 		CardSetManager->Initialize(NumOfCards);
 }
 
-void AMemoryCardsGameModeBase::EndGame(bool bWon) {
+void AMemoryCardsGameModeBase::EndGame_Implementation(bool bWon) {
 	if (bWon) {
 		UE_LOG(LogTemp, Warning, TEXT("GAME WON"));
 	}

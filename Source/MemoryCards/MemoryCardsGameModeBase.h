@@ -7,6 +7,11 @@
 #include "GameFramework/GameModeBase.h"
 #include "MemoryCardsGameModeBase.generated.h"
 
+UENUM()
+enum EWidgets {
+	MainMenu, DifficultySelection, EasyGameMode, MediumGameMode, HardGameMode, EndGame
+};
+
 UCLASS()
 class MEMORYCARDS_API AMemoryCardsGameModeBase : public AGameModeBase {
 	GENERATED_BODY()
@@ -16,7 +21,7 @@ class MEMORYCARDS_API AMemoryCardsGameModeBase : public AGameModeBase {
 	virtual void BeginPlay() override;
 
 	UPROPERTY()
-		UWidgetsManager* ViewportManager;
+		UWidgetsManager* WidgetManager;
 	UPROPERTY()
 		UCardSetManager* CardSetManager;
 
@@ -24,11 +29,23 @@ public:
 	UPROPERTY()
 		uint8 NumOfCards;
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> StartWidgetClass;
+		TMap<TEnumAsByte<EWidgets>, TSubclassOf<UUserWidget>> WidgetClasses;
+	/*UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> MainMenuWidgetClass;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> SelectDifficultyWidgetClass;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> EasyInGameWidgetClass;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> MediumInGameWidgetClass;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> HardInGameWidgetClass;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> EndGameWidgetClass;*/
 	
 	UFUNCTION(BlueprintCallable)
-		void ReplaceWidget(TSubclassOf<UUserWidget> NewWidgetClass);
-	UFUNCTION(BlueprintCallable)
+		void ReplaceWidgets(TEnumAsByte<EWidgets> WidgetClassName);
+	UFUNCTION()
 		void SetNumOfCards(uint8 NumberOfCards);
 	UFUNCTION()
 		void InitializeCard(TScriptInterface<ICard> Card);
@@ -37,6 +54,9 @@ public:
 	UFUNCTION()
 		void SetNumOfMovesTextBlock(UTextBlock* TextBlock);
 
+	UFUNCTION(BlueprintNativeEvent)
+		void EndGame(bool bWon);
+	void EndGame_Implementation(bool bWon);
 
 	/// Game Manager
 protected:
@@ -52,6 +72,4 @@ protected:
 	UPROPERTY()
 		UTextBlock* NumOfMovesTextBlock;
 
-	UFUNCTION()
-		void EndGame(bool bWon);
 };
