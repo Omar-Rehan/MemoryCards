@@ -13,5 +13,5 @@ class MEMORYCARDS_API ICustomWidget {
 	GENERATED_BODY()
 public:
 	UFUNCTION()
-		virtual void Setup() = 0;
+		virtual void Setup(UWorld* WorldReference) = 0;
 };

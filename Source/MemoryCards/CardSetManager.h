@@ -16,7 +16,7 @@ public:
 	UFUNCTION()
 		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
-		bool OnCardClicked(TScriptInterface<ICard> Card);
+		bool HandleCardClick(TScriptInterface<ICard> Card);
 	UFUNCTION()
 		void DisableAllCards();
 

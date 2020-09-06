@@ -28,7 +28,7 @@ void UCardButton::Disable() {
 }
 void UCardButton::HandleClick() {
 	if (CurrentGameMode)
-		CurrentGameMode->OnCardClicked(this);
+		CurrentGameMode->HandleCardClick(this);
 }
 
 void UCardButton::SetValue(int32 NewValue) {

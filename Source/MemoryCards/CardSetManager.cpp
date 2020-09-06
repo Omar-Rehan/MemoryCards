@@ -2,6 +2,7 @@
 
 void UCardSetManager::Initialize(uint8 NumberOfCards) {
 	CardSetSize = NumberOfCards;
+	CardSet.Empty();
 	InitializeCardSetValues();
 }
 void UCardSetManager::InitializeCard(TScriptInterface<ICard> Card) {
@@ -16,7 +17,7 @@ void UCardSetManager::InitializeCard(TScriptInterface<ICard> Card) {
 	Card->SetValue(Value);
 	CardSet.Push(Card);
 }
-bool UCardSetManager::OnCardClicked(TScriptInterface<ICard> Card) {
+bool UCardSetManager::HandleCardClick(TScriptInterface<ICard> Card) {
 	bool bIsMatch = false;
 	bool bCardAlreadyFlipped = (Card == FlippedCard);
 	if (bCardAlreadyFlipped) {

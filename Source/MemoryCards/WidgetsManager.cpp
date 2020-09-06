@@ -19,7 +19,7 @@ void UWidgetsManager::AddWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld*
 
 		ICustomWidget* CustomWidget = Cast<ICustomWidget>(NewWidget);
 		if (CustomWidget) 
-			CustomWidget->Setup();
+			CustomWidget->Setup(WorldReference);
 	}
 }
 void UWidgetsManager::RemoveWidget(TSubclassOf<UUserWidget> WidgetClass) {

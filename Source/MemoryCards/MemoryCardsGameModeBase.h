@@ -30,36 +30,29 @@ public:
 		uint8 NumOfCards;
 	UPROPERTY(EditAnywhere)
 		TMap<TEnumAsByte<EWidgets>, TSubclassOf<UUserWidget>> WidgetClasses;
-	/*UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> MainMenuWidgetClass;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> SelectDifficultyWidgetClass;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> EasyInGameWidgetClass;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> MediumInGameWidgetClass;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> HardInGameWidgetClass;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<UUserWidget> EndGameWidgetClass;*/
 	
+	UFUNCTION()
+		void StartGame(uint8 NumberOfCards);
+	UFUNCTION()
+		void EndGame(bool bWon);
+	UFUNCTION()
+		void PlayAgain();
+
 	UFUNCTION(BlueprintCallable)
 		void ReplaceWidgets(TEnumAsByte<EWidgets> WidgetClassName);
 	UFUNCTION()
-		void SetNumOfCards(uint8 NumberOfCards);
+		void SetNumOfMovesTextBlock(UTextBlock* TextBlock);
+
 	UFUNCTION()
 		void InitializeCard(TScriptInterface<ICard> Card);
 	UFUNCTION()
-		void OnCardClicked(TScriptInterface<ICard> Card);
-	UFUNCTION()
-		void SetNumOfMovesTextBlock(UTextBlock* TextBlock);
-
-	UFUNCTION(BlueprintNativeEvent)
-		void EndGame(bool bWon);
-	void EndGame_Implementation(bool bWon);
+		void HandleCardClick(TScriptInterface<ICard> Card);
 
 	/// Game Manager
 protected:
+	UPROPERTY()
+		TEnumAsByte<EWidgets> SelectedDiffculty;
+
 	UPROPERTY()
 		uint8 NumOfMatches;
 	UPROPERTY()
