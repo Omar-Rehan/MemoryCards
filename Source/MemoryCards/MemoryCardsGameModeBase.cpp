@@ -10,7 +10,6 @@ AMemoryCardsGameModeBase::AMemoryCardsGameModeBase() {
 
 void AMemoryCardsGameModeBase::BeginPlay() {
 	Super::BeginPlay();
-
 	if (WidgetManager)
 		WidgetManager->ReplaceWidgets(WidgetClasses[EWidgets::MainMenu], GetWorld());
 	else
@@ -38,8 +37,8 @@ void AMemoryCardsGameModeBase::HandleCardClick(TScriptInterface<ICard> Card) {
 	NumOfMoves++;
 	if (bIsMatch) NumOfMatches++;
 	
-	UE_LOG(LogTemp, Warning, TEXT("Num of moves: %d"), NumOfMoves);
-	UE_LOG(LogTemp, Warning, TEXT("Num of matches: %d"), NumOfMatches);
+	//UE_LOG(LogTemp, Warning, TEXT("Num of moves: %d"), NumOfMoves);
+	//UE_LOG(LogTemp, Warning, TEXT("Num of matches: %d"), NumOfMatches);
 	
 	if (NumOfMovesTextBlock)
 		NumOfMovesTextBlock->SetText(FText::FromString(FString("Number of moves: ") + FString::FromInt(NumOfMoves)));
@@ -57,7 +56,7 @@ void AMemoryCardsGameModeBase::StartGame(uint8 NumberOfCards) {
 	NumOfMoves = 0;
 	NumOfMatches = 0;
 
-	NumOfMovesMax = NumOfCards << 1;
+	NumOfMovesMax = (3 * NumOfCards) >> 1;
 	NumOfMatchesMax = NumOfCards >> 1;
 
 	SelectedDiffculty = NumOfCards == 8 ? EasyGameMode : NumOfCards == 16 ? MediumGameMode : HardGameMode;

@@ -12,6 +12,8 @@ class ICard {
 
 public:
 	UFUNCTION()
+		virtual void RequestFlip(bool bDelayed) = 0;
+	UFUNCTION()
 		virtual void Flip() = 0;
 	UFUNCTION()
 		virtual void Disable() = 0;

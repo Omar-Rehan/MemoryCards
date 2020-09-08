@@ -19,6 +19,8 @@ public:
 		void Initialize();
 
 	UFUNCTION()
+		virtual void RequestFlip(bool bDelayed) override final;
+	UFUNCTION()
 		virtual void Flip() override final;
 	UFUNCTION()
 		virtual void Disable() override final;
@@ -37,7 +39,7 @@ public:
 
 protected:
 	UPROPERTY()
-		AMemoryCardsGameModeBase* CurrentGameMode;
+		AMemoryCardsGameModeBase* GameMode;
 
 	UPROPERTY(VisibleAnywhere)
 		uint8 Index;
@@ -48,5 +50,5 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		UTextBlock* TextBlock;
-	void UpdateText();
+	void UpdateDisplay();
 };

@@ -1,7 +1,6 @@
 #include "CardButton.h"
 
 UCardButton::UCardButton() {
-	//UE_LOG(LogTemp, Warning, TEXT("Card Button Constructor"));
 	Value = -1;
 	Index = 255;
 	bHidden = true;
@@ -10,25 +9,35 @@ UCardButton::UCardButton() {
 }
 
 void UCardButton::Initialize() {
-	//UE_LOG(LogTemp, Warning, TEXT("Initialize"));
-	CurrentGameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
-	if (!CurrentGameMode)
+	if (!GameMode)
 		UE_LOG(LogTemp, Warning, TEXT("GameMode cast failed"));
 
 	if (Value == -1)
-		CurrentGameMode->InitializeCard(this);
+		GameMode->InitializeCard(this);
 }
 
+void UCardButton::RequestFlip(bool bDelayed) {
+	FTimerHandle Handle;
+	float Delay = bDelayed ? 2.0f : 0.0f;
+	GameMode->GetWorldTimerManager().SetTimer(Handle, this, &UCardButton::Flip, 1.0f, false, Delay);
+}
 void UCardButton::Flip() {
-	UpdateText();
+	if (bHidden)
+		UE_LOG(LogTemp, Warning, TEXT("CardButton::Flip -> Show %d"), Value)
+	else
+		UE_LOG(LogTemp, Warning, TEXT("CardButton::Flip -> Hide %d"), Value)
+
+	bHidden = !bHidden;
+	UpdateDisplay();
 }
 void UCardButton::Disable() {
 	SetIsEnabled(false);
 }
 void UCardButton::HandleClick() {
-	if (CurrentGameMode)
-		CurrentGameMode->HandleCardClick(this);
+	if (GameMode)
+		GameMode->HandleCardClick(this);
 }
 
 void UCardButton::SetValue(int32 NewValue) {
@@ -45,13 +54,12 @@ uint8 UCardButton::GetIndex() {
 	return Index;
 }
 
-void UCardButton::UpdateText() {
+void UCardButton::UpdateDisplay() {
 	if (!TextBlock) {
 		UE_LOG(LogTemp, Warning, TEXT("This button's text block reference is a nullptr"));
 		return;
 	}
-
-	bHidden = !bHidden;
+	
 	FString NewString = bHidden ? FString() : FString::FromInt(Value);
 	FText NewText = FText::FromString(NewString);
 	TextBlock->SetText(NewText);

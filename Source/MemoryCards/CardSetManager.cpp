@@ -21,32 +21,28 @@ bool UCardSetManager::HandleCardClick(TScriptInterface<ICard> Card) {
 	bool bIsMatch = false;
 	bool bCardAlreadyFlipped = (Card == FlippedCard);
 	if (bCardAlreadyFlipped) {
-		//UE_LOG(LogTemp, Warning, TEXT("A Card Has Been Unflipped"));
-		Card->Flip();
+		Card->RequestFlip(true);
 		FlippedCard = nullptr;
 	} 
 	else {
-		Card->Flip();
-		if (!FlippedCard) {
-			//UE_LOG(LogTemp, Warning, TEXT("One Flipped Card"));
+		Card->RequestFlip(false);
+		if (!FlippedCard) { // Only non-hidden card
 			FlippedCard = Card;
 		} 
-		else {
-			//UE_LOG(LogTemp, Warning, TEXT("Two Flipped Cards"));
-
+		else { // second non-hidden card
 			int32 Value1 = Card->GetValue();
 			int32 Value2 = FlippedCard->GetValue();
 
 			if (Value1 == Value2) {
-				UE_LOG(LogTemp, Warning, TEXT("MATCH"));
+				//UE_LOG(LogTemp, Warning, TEXT("Match"));
 				Card->Disable();
 				FlippedCard->Disable();
 				bIsMatch = true;
 			} 
 			else {
-				UE_LOG(LogTemp, Warning, TEXT("WRONG"));
-				Card->Flip();
-				FlippedCard->Flip();
+				//UE_LOG(LogTemp, Warning, TEXT("Wrong"));
+				Card->RequestFlip(true);
+				FlippedCard->RequestFlip(true);
 			}
 
 			FlippedCard = nullptr;
