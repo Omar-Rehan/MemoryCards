@@ -19,9 +19,14 @@ void UCardButton::Initialize() {
 }
 
 void UCardButton::RequestFlip(bool bDelayed) {
+	if (!bDelayed) {
+		Flip();
+		return;
+	}
+
 	FTimerHandle Handle;
-	float Delay = bDelayed ? 2.0f : 0.0f;
-	GameMode->GetWorldTimerManager().SetTimer(Handle, this, &UCardButton::Flip, 1.0f, false, Delay);
+	GameMode->GetWorldTimerManager().SetTimer(Handle, this, &UCardButton::Flip, 1.0f, false, 2.0f);
+	bBusy = true;
 }
 void UCardButton::Flip() {
 	if (bHidden)
@@ -30,12 +35,16 @@ void UCardButton::Flip() {
 		UE_LOG(LogTemp, Warning, TEXT("CardButton::Flip -> Hide %d"), Value)
 
 	bHidden = !bHidden;
+	bBusy = false;
+	Visibility = ESlateVisibility::Visible;
 	UpdateDisplay();
 }
 void UCardButton::Disable() {
 	SetIsEnabled(false);
 }
 void UCardButton::HandleClick() {
+	if (bBusy) return;
+
 	if (GameMode)
 		GameMode->HandleCardClick(this);
 }

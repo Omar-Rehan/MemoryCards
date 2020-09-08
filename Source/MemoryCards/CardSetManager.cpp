@@ -21,7 +21,7 @@ bool UCardSetManager::HandleCardClick(TScriptInterface<ICard> Card) {
 	bool bIsMatch = false;
 	bool bCardAlreadyFlipped = (Card == FlippedCard);
 	if (bCardAlreadyFlipped) {
-		Card->RequestFlip(true);
+		Card->RequestFlip(false);
 		FlippedCard = nullptr;
 	} 
 	else {
@@ -34,13 +34,11 @@ bool UCardSetManager::HandleCardClick(TScriptInterface<ICard> Card) {
 			int32 Value2 = FlippedCard->GetValue();
 
 			if (Value1 == Value2) {
-				//UE_LOG(LogTemp, Warning, TEXT("Match"));
 				Card->Disable();
 				FlippedCard->Disable();
 				bIsMatch = true;
 			} 
 			else {
-				//UE_LOG(LogTemp, Warning, TEXT("Wrong"));
 				Card->RequestFlip(true);
 				FlippedCard->RequestFlip(true);
 			}

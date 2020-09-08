@@ -36,10 +36,7 @@ void AMemoryCardsGameModeBase::HandleCardClick(TScriptInterface<ICard> Card) {
 	bool bIsMatch = CardSetManager->HandleCardClick(Card);
 	NumOfMoves++;
 	if (bIsMatch) NumOfMatches++;
-	
-	//UE_LOG(LogTemp, Warning, TEXT("Num of moves: %d"), NumOfMoves);
-	//UE_LOG(LogTemp, Warning, TEXT("Num of matches: %d"), NumOfMatches);
-	
+		
 	if (NumOfMovesTextBlock)
 		NumOfMovesTextBlock->SetText(FText::FromString(FString("Number of moves: ") + FString::FromInt(NumOfMoves)));
 

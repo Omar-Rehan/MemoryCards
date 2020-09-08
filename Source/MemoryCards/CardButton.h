@@ -47,6 +47,8 @@ protected:
 		int32 Value;
 	UPROPERTY(VisibleAnywhere)
 		bool bHidden;
+	UPROPERTY()
+		bool bBusy;
 
 	UPROPERTY(EditAnywhere)
 		UTextBlock* TextBlock;
