@@ -18,6 +18,8 @@ public:
 		void AddWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference);
 	UFUNCTION()
 		void RemoveWidget(TSubclassOf<UUserWidget> WidgetClass);
+	UFUNCTION()
+		void ClearWidgets();
 
 protected:
 	UPROPERTY()

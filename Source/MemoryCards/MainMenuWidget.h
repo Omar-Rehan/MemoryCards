@@ -19,14 +19,18 @@ protected:
 		AMemoryCardsGameModeBase* GameMode;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
-		UButton* PlayButton;
+		UButton* Play2DButton;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+		UButton* Play3DButton;
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 		UButton* OptionsButton;
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 		UButton* ExitButton;
 
 	UFUNCTION()
-		void HandlePlayButtonClick();
+		void HandlePlay2DButtonClick();
+	UFUNCTION()
+		void HandlePlay3DButtonClick();
 	UFUNCTION()
 		void HandleOptionsButtonClick();
 	UFUNCTION()

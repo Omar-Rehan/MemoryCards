@@ -9,14 +9,32 @@ void UDifficultySelectionWidget::Setup(UWorld* WorldReference) {
 }
 
 void UDifficultySelectionWidget::HandleEasyButtonClick() {
-	if (GameMode)
-		GameMode->ReplaceWidgets(EWidgets::EasyGameMode);
+	if (GameMode) {
+		if (GameMode->GetIs2D())
+			GameMode->ReplaceWidgets(EWidgets::EasyGameMode);
+		else {
+			GameMode->ClearWidgets();
+			UGameplayStatics::OpenLevel(GetWorld(), "Easy3DGame");
+		}
+	}
 }
 void UDifficultySelectionWidget::HandleMediumButtonClick() {
-	if (GameMode)
-		GameMode->ReplaceWidgets(EWidgets::MediumGameMode);
+	if (GameMode) {
+		if (GameMode->GetIs2D())
+			GameMode->ReplaceWidgets(EWidgets::MediumGameMode);
+		else {
+			GameMode->ClearWidgets();
+			UGameplayStatics::OpenLevel(GetWorld(), "Medium3DGame");
+		}
+	}
 }
 void UDifficultySelectionWidget::HandleHardButtonClick() {
-	if (GameMode)
-		GameMode->ReplaceWidgets(EWidgets::HardGameMode);
+	if (GameMode) {
+		if (GameMode->GetIs2D())
+			GameMode->ReplaceWidgets(EWidgets::HardGameMode);
+		else {
+			GameMode->ClearWidgets();
+			UGameplayStatics::OpenLevel(GetWorld(), "Hard3DGame");
+		}
+	}
 }

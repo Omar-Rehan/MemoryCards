@@ -4,21 +4,33 @@ AMemoryCardsGameModeBase::AMemoryCardsGameModeBase() {
 	CardSetManager = CreateDefaultSubobject<UCardSetManager>(TEXT("Cards Manager"));
 	AddOwnedComponent(CardSetManager);
 
-	WidgetManager = CreateDefaultSubobject<UWidgetsManager>(TEXT("Widgets Manager"));
-	AddOwnedComponent(WidgetManager);
+	WidgetsManager = CreateDefaultSubobject<UWidgetsManager>(TEXT("Widgets Manager"));
+	AddOwnedComponent(WidgetsManager);
 }
 
 void AMemoryCardsGameModeBase::BeginPlay() {
+	UE_LOG(LogTemp, Warning, TEXT("Game Mode Begin Play"));
 	Super::BeginPlay();
-	if (WidgetManager)
-		WidgetManager->ReplaceWidgets(WidgetClasses[EWidgets::MainMenu], GetWorld());
+	if (WidgetsManager) {
+		FString CurrentLevel = UGameplayStatics::GetCurrentLevelName(GetWorld());
+		if (CurrentLevel == "GameMap") {
+			Enable2DMode();
+			WidgetsManager->ReplaceWidgets(WidgetClasses[EWidgets::MainMenu], GetWorld());
+		} else {
+			Enable3DMode();
+		}
+	} 
 	else
 		UE_LOG(LogTemp, Warning, TEXT("WidgetManager is nullified"));
 }
 
 void AMemoryCardsGameModeBase::ReplaceWidgets(TEnumAsByte<EWidgets> WidgetClass) {
-	if (WidgetManager)
-		WidgetManager->ReplaceWidgets(WidgetClasses[WidgetClass], GetWorld());
+	if (WidgetsManager)
+		WidgetsManager->ReplaceWidgets(WidgetClasses[WidgetClass], GetWorld());
+}
+void AMemoryCardsGameModeBase::ClearWidgets() {
+	if (WidgetsManager)
+		WidgetsManager->ClearWidgets();
 }
 
 void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {
@@ -38,7 +50,7 @@ void AMemoryCardsGameModeBase::HandleCardClick(TScriptInterface<ICard> Card) {
 	if (bIsMatch) NumOfMatches++;
 		
 	if (NumOfMovesTextBlock)
-		NumOfMovesTextBlock->SetText(FText::FromString(FString("Number of moves: ") + FString::FromInt(NumOfMoves)));
+		NumOfMovesTextBlock->SetText(FText::FromString(FString("Number of moves left: ") + FString::FromInt(NumOfMovesMax - NumOfMoves)));
 
 	if (NumOfMatches == NumOfMatchesMax)
 		EndGame(true);
@@ -70,15 +82,17 @@ void AMemoryCardsGameModeBase::EndGame(bool bWon) {
 		CardSetManager->DisableAllCards();
 	}
 
-	if (WidgetManager) {
+	if (WidgetsManager) {
 		TEnumAsByte<EWidgets> EndGameWidgetClass = EWidgets::EndGame;
-		WidgetManager->AddWidget(WidgetClasses[EWidgets::EndGame], GetWorld());
+		WidgetsManager->AddWidget(WidgetClasses[EWidgets::EndGame], GetWorld());
 	}
 }
 
 void AMemoryCardsGameModeBase::PlayAgain() {
-	if (WidgetManager)
-		WidgetManager->ReplaceWidgets(WidgetClasses[SelectedDiffculty], GetWorld());
+	if (WidgetsManager) {
+		if (bIs2D)
+			WidgetsManager->ReplaceWidgets(WidgetClasses[SelectedDiffculty], GetWorld());
+	}
 }
 
 void AMemoryCardsGameModeBase::SetNumOfMovesTextBlock(UTextBlock* TextBlock) {

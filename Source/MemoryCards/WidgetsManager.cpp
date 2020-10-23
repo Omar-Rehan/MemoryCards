@@ -1,12 +1,7 @@
 #include "WidgetsManager.h"
 
 void UWidgetsManager::ReplaceWidgets(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference) {
-	for (auto Widget : CurrentWidgets) {
-		Widget->RemoveFromViewport();
-		Widget = nullptr;
-	}
-	CurrentWidgets.Empty();
-	
+	ClearWidgets();
 	AddWidget(NewWidgetClass, WorldReference);
 }
 void UWidgetsManager::AddWidget(TSubclassOf<UUserWidget> NewWidgetClass, UWorld* WorldReference) {
@@ -33,4 +28,12 @@ void UWidgetsManager::RemoveWidget(TSubclassOf<UUserWidget> WidgetClass) {
 			Widget = nullptr;
 		}
 	}
+}
+
+void UWidgetsManager::ClearWidgets() {
+	for (auto Widget : CurrentWidgets) {
+		Widget->RemoveFromViewport();
+		Widget = nullptr;
+	}
+	CurrentWidgets.Empty();
 }
