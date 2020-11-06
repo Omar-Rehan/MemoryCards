@@ -31,4 +31,6 @@ protected:
 		void HandleMediumButtonClick();
 	UFUNCTION()
 		void HandleHardButtonClick();
+	UFUNCTION()
+		void LoadGame();
 };

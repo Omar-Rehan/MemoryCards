@@ -29,8 +29,12 @@ class MEMORYCARDS_API AMemoryCardsGameModeBase : public AGameModeBase {
 public:
 	UPROPERTY()
 		uint8 NumOfCards;
+	UPROPERTY()
+		TEnumAsByte<EWidgets> SelectedDiffculty;
 	UPROPERTY(EditAnywhere)
 		TMap<TEnumAsByte<EWidgets>, TSubclassOf<UUserWidget>> WidgetClasses;
+	UPROPERTY(EditAnywhere)
+		TMap<TEnumAsByte<EWidgets>, FName> MapIDs;
 	
 	UFUNCTION()
 		void StartGame(uint8 NumberOfCards);
@@ -39,6 +43,9 @@ public:
 	UFUNCTION()
 		void PlayAgain();
 
+
+	UFUNCTION()
+		void ReplaceMap(TEnumAsByte<EWidgets> WidgetClassName);
 	UFUNCTION(BlueprintCallable)
 		void ReplaceWidgets(TEnumAsByte<EWidgets> WidgetClassName);
 	UFUNCTION()
@@ -73,9 +80,6 @@ public:
 protected:
 	UPROPERTY()
 		bool bIs2D;
-
-	UPROPERTY()
-		TEnumAsByte<EWidgets> SelectedDiffculty;
 
 	UPROPERTY()
 		uint8 NumOfMatches;

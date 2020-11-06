@@ -24,6 +24,10 @@ void AMemoryCardsGameModeBase::BeginPlay() {
 		UE_LOG(LogTemp, Warning, TEXT("WidgetManager is nullified"));
 }
 
+void AMemoryCardsGameModeBase::ReplaceMap(TEnumAsByte<EWidgets> WidgetClassName) {
+	UGameplayStatics::OpenLevel(GetWorld(), MapIDs[SelectedDiffculty]);
+}
+
 void AMemoryCardsGameModeBase::ReplaceWidgets(TEnumAsByte<EWidgets> WidgetClass) {
 	if (WidgetsManager)
 		WidgetsManager->ReplaceWidgets(WidgetClasses[WidgetClass], GetWorld());
@@ -94,9 +98,9 @@ void AMemoryCardsGameModeBase::EndGame(bool bWon) {
 void AMemoryCardsGameModeBase::PlayAgain() {
 	if (WidgetsManager) {
 		if (bIs2D)
-			WidgetsManager->ReplaceWidgets(WidgetClasses[SelectedDiffculty], GetWorld());
+			ReplaceWidgets(SelectedDiffculty);
 		else
-			UGameplayStatics::OpenLevel(GetWorld(), "Easy3DGame"); // TODO: choose the right 3d level
+			ReplaceMap(SelectedDiffculty);
 	}
 }
 

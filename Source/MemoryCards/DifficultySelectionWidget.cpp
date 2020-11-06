@@ -8,33 +8,30 @@ void UDifficultySelectionWidget::Setup(UWorld* WorldReference) {
 	HardButton->OnClicked.AddDynamic(this, &UDifficultySelectionWidget::HandleHardButtonClick);
 }
 
-void UDifficultySelectionWidget::HandleEasyButtonClick() {
-	if (GameMode) {
-		if (GameMode->GetIs2D())
-			GameMode->ReplaceWidgets(EWidgets::EasyGameMode);
-		else {
-			GameMode->ClearWidgets();
-			UGameplayStatics::OpenLevel(GetWorld(), "Easy3DGame");
-		}
+void UDifficultySelectionWidget::LoadGame() {
+	if (GameMode->GetIs2D())
+		GameMode->ReplaceWidgets(GameMode->SelectedDiffculty);
+	else {
+		GameMode->ClearWidgets();
+		GameMode->ReplaceMap(GameMode->SelectedDiffculty);
 	}
+}
+
+void UDifficultySelectionWidget::HandleEasyButtonClick() {
+	if (!GameMode) return;
+	
+	GameMode->SelectedDiffculty = EWidgets::EasyGameMode;
+	LoadGame();
 }
 void UDifficultySelectionWidget::HandleMediumButtonClick() {
-	if (GameMode) {
-		if (GameMode->GetIs2D())
-			GameMode->ReplaceWidgets(EWidgets::MediumGameMode);
-		else {
-			GameMode->ClearWidgets();
-			UGameplayStatics::OpenLevel(GetWorld(), "Medium3DGame");
-		}
-	}
+	if (!GameMode) return;
+		
+	GameMode->SelectedDiffculty = EWidgets::MediumGameMode;
+	LoadGame();
 }
 void UDifficultySelectionWidget::HandleHardButtonClick() {
-	if (GameMode) {
-		if (GameMode->GetIs2D())
-			GameMode->ReplaceWidgets(EWidgets::HardGameMode);
-		else {
-			GameMode->ClearWidgets();
-			UGameplayStatics::OpenLevel(GetWorld(), "Hard3DGame");
-		}
-	}
+	if (!GameMode) return;
+
+	GameMode->SelectedDiffculty = EWidgets::HardGameMode;
+	LoadGame();
 }
