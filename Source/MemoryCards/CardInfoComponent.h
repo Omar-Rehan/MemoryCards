@@ -2,18 +2,21 @@
 
 #include "CoreMinimal.h"
 #include "Card.h"
-#include "Components/Button.h"
-#include "Blueprint/UserWidget.h"
-#include "Components/TextBlock.h"
-#include "Kismet/GameplayStatics.h"
+#include "ActorRotator.h"
+#include "Materials/Material.h"
 #include "MemoryCardsGameModeBase.h"
-#include "CardButton.generated.h"
+#include "Components/ActorComponent.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Components/StaticMeshComponent.h"
+#include "CardInfoComponent.generated.h"
 
-UCLASS()
-class MEMORYCARDS_API UCardButton : public UButton, public ICard {
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class MEMORYCARDS_API UCardInfoComponent : public UActorComponent, public ICard {
 	GENERATED_BODY()
-public:
-	UCardButton();
+
+public:	
+	UCardInfoComponent();
 
 	UFUNCTION()
 		virtual void Initialize() override final;
@@ -50,7 +53,5 @@ protected:
 	UPROPERTY()
 		bool bBusy;
 
-	UPROPERTY(EditAnywhere)
-		UTextBlock* TextBlock;
 	void UpdateDisplay();
 };

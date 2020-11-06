@@ -10,9 +10,9 @@ UCardButton::UCardButton() {
 
 void UCardButton::Initialize() {
 	GameMode = Cast<AMemoryCardsGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-
-	if (!GameMode)
-		UE_LOG(LogTemp, Warning, TEXT("GameMode cast failed"));
+	if (!GameMode) {
+		return;
+	}
 
 	if (Value == -1)
 		GameMode->InitializeCard(this);
@@ -42,6 +42,7 @@ void UCardButton::Flip() {
 void UCardButton::Disable() {
 	SetIsEnabled(false);
 }
+
 void UCardButton::HandleClick() {
 	if (bBusy) return;
 

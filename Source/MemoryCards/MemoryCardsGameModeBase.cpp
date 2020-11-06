@@ -40,11 +40,12 @@ void AMemoryCardsGameModeBase::InitializeCard(TScriptInterface<ICard> Card) {
 		UE_LOG(LogTemp, Warning, TEXT("CardSetManager is null in GameMode::InitializeCard"))
 }
 void AMemoryCardsGameModeBase::HandleCardClick(TScriptInterface<ICard> Card) {
+	UE_LOG(LogTemp, Warning, TEXT("Game Mode handle card click function"));
 	if (!CardSetManager) {
 		UE_LOG(LogTemp, Warning, TEXT("Cards Manager is nullptr"));
 		return;
 	}
-		
+	
 	bool bIsMatch = CardSetManager->HandleCardClick(Card);
 	NumOfMoves++;
 	if (bIsMatch) NumOfMatches++;
@@ -74,6 +75,8 @@ void AMemoryCardsGameModeBase::StartGame(uint8 NumberOfCards) {
 		CardSetManager->Initialize(NumOfCards);
 }
 void AMemoryCardsGameModeBase::EndGame(bool bWon) {
+	Enable2DMode();
+
 	if (bWon) {
 		UE_LOG(LogTemp, Warning, TEXT("GAME WON"));
 	}
@@ -92,6 +95,8 @@ void AMemoryCardsGameModeBase::PlayAgain() {
 	if (WidgetsManager) {
 		if (bIs2D)
 			WidgetsManager->ReplaceWidgets(WidgetClasses[SelectedDiffculty], GetWorld());
+		else
+			UGameplayStatics::OpenLevel(GetWorld(), "Easy3DGame"); // TODO: choose the right 3d level
 	}
 }
 

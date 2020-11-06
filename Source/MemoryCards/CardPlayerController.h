@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "DrawDebugHelpers.h"
+#include "CardInfoComponent.h"
 #include "CollisionQueryParams.h"
 #include "MemoryCardsGameModeBase.h"
 #include "GameFramework/PlayerController.h"
@@ -14,5 +15,5 @@ class MEMORYCARDS_API ACardPlayerController : public APlayerController {
 	void BeginPlay() override;
 
 public:
-	void AttemptCardFlip();
+	void ClickCard();
 };
